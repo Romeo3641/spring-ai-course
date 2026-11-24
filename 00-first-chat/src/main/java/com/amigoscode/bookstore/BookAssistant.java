@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.metadata.Usage;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,11 +15,11 @@ public class BookAssistant {
 
 	private static final Logger log = LoggerFactory.getLogger(BookAssistant.class);
 
-	private final ChatClient chatClient;
+	private final ChatClient openAiChatClient;
 
 	public BookAssistant(ChatClient.Builder chatClientBuilder) {
 		// TODO task-2: build a ChatClient from the builder Spring AI gives you
-		this.chatClient = null;
+		this.openAiChatClient = chatClientBuilder.build();
 	}
 
 	/**
@@ -28,7 +27,8 @@ public class BookAssistant {
 	 */
 	public String ask(String question) {
 		// TODO task-3: send the question as a user message and return the answer text
-		throw new UnsupportedOperationException("TODO task-3");
+		return openAiChatClient.prompt().user(question).call().content();
+//		throw new UnsupportedOperationException("TODO task-3");
 	}
 
 	/**
@@ -36,8 +36,11 @@ public class BookAssistant {
 	 */
 	public Answer askWithUsage(String question) {
 		// TODO task-4: ask for the full ChatResponse instead of just the content,
+		ChatClient.CallResponseSpec callResponseSpec = openAiChatClient.prompt().user(question).call();
+		Usage usage = callResponseSpec.chatResponse().getMetadata().getUsage();
+		return new Answer(callResponseSpec.content(), usage.getPromptTokens(), usage.getCompletionTokens());
 		// then read the text and the token usage from it
-		throw new UnsupportedOperationException("TODO task-4");
+//		throw new UnsupportedOperationException("TODO task-4");
 	}
 
 	public record Answer(String text, Integer promptTokens, Integer completionTokens) {

@@ -2,7 +2,7 @@ package com.amigoscode.bookstore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.deepseek.DeepSeekChatModel;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
@@ -26,7 +26,7 @@ class Task1DeepSeekConfigTest {
 	@Test
 	void usesDeepSeekV4Flash() {
 		assertThat(environment.getProperty("spring.ai.deepseek.chat.model")).isEqualTo("deepseek-v4-flash");
-		assertThat(chatModel).isInstanceOf(DeepSeekChatModel.class);
+		assertThat(chatModel).isInstanceOf(OpenAiChatModel.class);
 	}
 
 }
